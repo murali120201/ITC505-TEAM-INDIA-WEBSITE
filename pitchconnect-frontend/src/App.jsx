@@ -10,7 +10,8 @@ import Dashboard from './Dashboard';
 import UploadPitch from './UploadPitch';
 import MyPitches from './mypitches.jsx';
 import Startups from './Startups';
-import PrivateRoute from './PrivateRoute';
+import PrivateRoute from './privateroute.jsx';
+
 
 function AppRoutes() {
   const location = useLocation();
