@@ -8,7 +8,7 @@ import Register from './Register';
 import AuthChoice from './AuthChoice';
 import Dashboard from './Dashboard';
 import UploadPitch from './UploadPitch';
-import myPitches from './myPitches';
+import MyPitches from './mypitches.jsx';
 import Startups from './Startups';
 import PrivateRoute from './PrivateRoute';
 
@@ -46,7 +46,7 @@ function AppRoutes() {
           path="/mypitches"
           element={
             <PrivateRoute>
-              <myPitches />
+              <MyPitches />
             </PrivateRoute>
           }
         />
