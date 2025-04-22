@@ -8,7 +8,7 @@ import Register from './Register';
 import AuthChoice from './AuthChoice';
 import Dashboard from './Dashboard';
 import UploadPitch from './UploadPitch';
-import MyPitches from './MyPitches';
+import MyPitches from './myPitches';
 import Startups from './Startups';
 import PrivateRoute from './PrivateRoute';
 
