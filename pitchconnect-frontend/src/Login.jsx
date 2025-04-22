@@ -16,7 +16,7 @@ function Login() {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/login', {
+      const res = await fetch('https://itc505-team-india-website.onrender.com/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,11 +27,11 @@ function Login() {
       const data = await res.json();
 
       if (res.ok) {
-        alert(data.message);
+        alert(data.message || 'Login successful!');
         localStorage.setItem('user', JSON.stringify(data.user));
         navigate('/dashboard');
       } else {
-        alert(data.message);
+        alert(data.message || 'Login failed. Please try again.');
       }
     } catch (err) {
       console.error('Login error:', err);

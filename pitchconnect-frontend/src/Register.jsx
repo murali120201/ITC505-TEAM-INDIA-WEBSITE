@@ -26,7 +26,7 @@ function Register() {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/register', {
+      const res = await fetch('https://itc505-team-india-website.onrender.com/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ function Register() {
       const data = await res.json();
 
       if (res.ok) {
-        alert(data.message);
+        alert(data.message || 'Registration successful!');
         navigate('/login');
       } else {
         alert(data.message || 'Registration failed');
