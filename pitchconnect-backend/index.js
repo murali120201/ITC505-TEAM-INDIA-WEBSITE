@@ -89,29 +89,21 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// ✅ Upload pitch (fixed)
-app.post('/api/pitches', async (req, res) => {
-  const { title, description, category, userEmail } = req.body;
-  console.log('📩 Incoming pitch:', { title, description, category, userEmail });
-
-  if (!title || !description || !category || !userEmail) {
-    return res.status(400).json({ message: 'All fields are required.' });
-  }
+app.get('/api/pitches', async (req, res) => {
+  const { userEmail, role } = req.query;
 
   try {
-    // Just insert using user_email directly (no user_id)
-    await db.query(
-      'INSERT INTO pitches (title, description, category, user_email) VALUES ($1, $2, $3, $4)',
-      [title, description, category, userEmail]
-    );
+    const result = role === 'startup'
+      ? await db.query('SELECT * FROM pitches WHERE user_email = $1', [userEmail])
+      : await db.query('SELECT * FROM pitches');
 
-    console.log('✅ Pitch saved to DB');
-    res.status(201).json({ message: 'Pitch submitted successfully!' });
+    res.json(result.rows);
   } catch (err) {
-    console.error('❌ Pitch upload error:', err);
-    res.status(500).json({ message: 'Server error. Try again.' });
+    console.error('Get pitches error:', err);
+    res.status(500).json({ message: 'Failed to fetch pitches' });
   }
 });
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
