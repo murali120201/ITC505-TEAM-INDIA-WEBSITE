@@ -26,11 +26,6 @@ function UploadPitch() {
       return;
     }
 
-    if (!user) {
-      alert('User not authenticated.');
-      return;
-    }
-
     try {
       const res = await fetch('https://itc505-team-india-website.onrender.com/api/pitches', {
         method: 'POST',
