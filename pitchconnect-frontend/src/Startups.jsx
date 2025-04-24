@@ -22,8 +22,19 @@ function Startups() {
 
     setUser(parsedUser);
 
-    const storedPitches = JSON.parse(localStorage.getItem('pitches')) || [];
-    setPitches(storedPitches);
+    const fetchPitches = async () => {
+      try {
+        const res = await fetch(
+          `https://itc505-team-india-website.onrender.com/api/pitches?userEmail=${parsedUser.email}&role=investor`
+        );
+        const data = await res.json();
+        setPitches(data);
+      } catch (err) {
+        console.error('Error fetching startup pitches:', err);
+      }
+    };
+
+    fetchPitches();
   }, [navigate]);
 
   return (
@@ -38,7 +49,7 @@ function Startups() {
               <h3>{pitch.title}</h3>
               <p><strong>Description:</strong> {pitch.description}</p>
               <p><strong>Category:</strong> {pitch.category}</p>
-              <p><strong>Submitted by:</strong> {pitch.userEmail}</p>
+              <p><strong>Submitted by:</strong> {pitch.user_email}</p>
             </div>
           ))}
         </div>
