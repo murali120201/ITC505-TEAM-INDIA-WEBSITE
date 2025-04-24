@@ -89,6 +89,28 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+// ✅ Upload pitch route (this was missing)
+app.post('/api/pitches', async (req, res) => {
+  const { title, description, category, userEmail } = req.body;
+
+  if (!title || !description || !category || !userEmail) {
+    return res.status(400).json({ message: 'All fields are required.' });
+  }
+
+  try {
+    await db.query(
+      'INSERT INTO pitches (title, description, category, user_email) VALUES ($1, $2, $3, $4)',
+      [title, description, category, userEmail]
+    );
+
+    res.status(201).json({ message: 'Pitch submitted successfully!' });
+  } catch (err) {
+    console.error('❌ Pitch upload error:', err);
+    res.status(500).json({ message: 'Server error while uploading pitch.' });
+  }
+});
+
+// ✅ Fetch pitches route
 app.get('/api/pitches', async (req, res) => {
   const { userEmail, role } = req.query;
 
@@ -103,7 +125,6 @@ app.get('/api/pitches', async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch pitches' });
   }
 });
-
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
