@@ -15,26 +15,28 @@ function MyPitches() {
     }
 
     const parsedUser = JSON.parse(storedUser);
-    if (parsedUser.role !== 'startup') {
-      navigate('/dashboard');
-      return;
-    }
-
     setUser(parsedUser);
 
-    // 🔍 Filter only this user's pitches
-    const allPitches = JSON.parse(localStorage.getItem('pitches')) || [];
-    const userPitches = allPitches.filter(
-      (pitch) => pitch.userEmail === parsedUser.email
-    );
-    setMyPitches(userPitches);
+    const fetchPitches = async () => {
+      try {
+        const res = await fetch(
+          `https://itc505-team-india-website.onrender.com/api/pitches?userEmail=${parsedUser.email}&role=${parsedUser.role}`
+        );
+        const data = await res.json();
+        setMyPitches(data);
+      } catch (err) {
+        console.error('Error fetching pitches:', err);
+      }
+    };
+
+    fetchPitches();
   }, [navigate]);
 
   return (
     <div className="auth-container">
-      <h2>My Submitted Pitches</h2>
+      <h2>{user?.role === 'startup' ? 'My Submitted Pitches' : 'All Startup Pitches'}</h2>
       {myPitches.length === 0 ? (
-        <p>You haven’t submitted any pitches yet.</p>
+        <p>No pitches found.</p>
       ) : (
         <div className="pitch-list">
           {myPitches.map((pitch) => (
@@ -42,6 +44,9 @@ function MyPitches() {
               <h3>{pitch.title}</h3>
               <p><strong>Description:</strong> {pitch.description}</p>
               <p><strong>Category:</strong> {pitch.category}</p>
+              {user?.role === 'investor' && (
+                <p><strong>Submitted by:</strong> {pitch.user_email}</p>
+              )}
               <p><strong>Submitted on:</strong> {new Date(pitch.id).toLocaleDateString()}</p>
             </div>
           ))}
